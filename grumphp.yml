@@ -1,0 +1,16 @@
+grumphp:
+    tasks:
+        composer: ~
+        git_blacklist: ~
+        git_branch_name: ~
+        phpcs:
+                standard: PSR12
+                ignore_patterns: [./tests/*, ./resources/*, ./database/*, ./bootstrap/*, ./_ide_helper.php, ./.phpstorm.meta.php]
+        phpstan: ~
+        psalm: ~
+        phpmd:
+            ruleset: [phpmd-ruleset.xml]
+            whitelist_patterns:
+                - /^app\/(.*)/
+                - /^domain\/(.*)/
+        pest: ~

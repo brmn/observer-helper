@@ -1,0 +1,27 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+
+    paths:
+        - app
+
+    # The level 8 is the highest level
+    level: 5
+
+    ignoreErrors:
+
+    excludePaths:
+        - ./*/*/FileToBeExcluded.php
+        - routes
+        - database
+        - _ide_helper.php
+        - .phpstorm.meta.php
+        - tests
+
+    checkMissingIterableValueType: false
+
+    parallel:
+        jobSize: 5
+        maximumNumberOfProcesses: 4
+        minimumNumberOfJobsPerProcess: 2
