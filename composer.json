@@ -22,7 +22,6 @@
         "spatie/async": "^1.5",
         "spatie/data-transfer-object": "^2.6",
         "spatie/enum": "^3.6",
-        "spatie/laravel-validation-rules": "^2.7",
         "webmozart/assert": "^1.9"
     },
     "require-dev": {

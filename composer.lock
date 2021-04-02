@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "778243069cfb62ae68bc7bed633fbcfb",
+    "content-hash": "e7e12a2722d71d947bbf76e64f8b7a8a",
     "packages": [
         {
             "name": "amphp/amp",
@@ -3258,64 +3258,6 @@
                 }
             ],
             "time": "2020-08-23T07:39:11+00:00"
-        },
-        {
-            "name": "league/iso3166",
-            "version": "2.1.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thephpleague/iso3166.git",
-                "reference": "aed3b32fc293afdf2c6c6a322c2408eb5d20804a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/iso3166/zipball/aed3b32fc293afdf2c6c6a322c2408eb5d20804a",
-                "reference": "aed3b32fc293afdf2c6c6a322c2408eb5d20804a",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.0"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.12",
-                "phpunit/phpunit": "^5.7.11 || ^6.0 || ^7.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "League\\ISO3166\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Rob Bast",
-                    "email": "rob.bast@gmail.com"
-                }
-            ],
-            "description": "ISO 3166-1 PHP Library",
-            "homepage": "https://github.com/thephpleague/iso3166",
-            "keywords": [
-                "3166",
-                "3166-1",
-                "ISO 3166",
-                "countries",
-                "iso",
-                "library"
-            ],
-            "support": {
-                "issues": "https://github.com/thephpleague/iso3166/issues",
-                "source": "https://github.com/thephpleague/iso3166"
-            },
-            "time": "2020-01-29T07:08:12+00:00"
         },
         {
             "name": "league/mime-type-detection",
@@ -8232,76 +8174,6 @@
                 }
             ],
             "time": "2021-03-13T12:50:02+00:00"
-        },
-        {
-            "name": "spatie/laravel-validation-rules",
-            "version": "2.7.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/spatie/laravel-validation-rules.git",
-                "reference": "3c55013f753eec183381040849991ba501eec131"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-validation-rules/zipball/3c55013f753eec183381040849991ba501eec131",
-                "reference": "3c55013f753eec183381040849991ba501eec131",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/support": "^6.0|^7.0|^8.0",
-                "league/iso3166": "^2.1.5",
-                "php": "^7.3|^8.0"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.16",
-                "laravel/legacy-factories": "^1.0.4",
-                "myclabs/php-enum": "^1.6",
-                "orchestra/testbench": "^4.5|^5.0|^6.0",
-                "phpunit/phpunit": "^9.3",
-                "spatie/enum": "^2.2"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Spatie\\ValidationRules\\ValidationRulesServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Spatie\\ValidationRules\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Freek Van der Herten",
-                    "email": "freek@spatie.be",
-                    "homepage": "https://spatie.be",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A set of useful Laravel validation rules",
-            "homepage": "https://github.com/spatie/laravel-validation-rules",
-            "keywords": [
-                "laravel-validation-rules",
-                "spatie"
-            ],
-            "support": {
-                "issues": "https://github.com/spatie/laravel-validation-rules/issues",
-                "source": "https://github.com/spatie/laravel-validation-rules/tree/2.7.1"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/spatie",
-                    "type": "github"
-                }
-            ],
-            "time": "2020-11-30T15:03:24+00:00"
         },
         {
             "name": "spatie/macroable",
