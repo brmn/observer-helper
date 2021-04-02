@@ -5,21 +5,25 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^7.4|^8.0",
+        "ext-json": "*",
+        "ext-pdo": "*",
+        "botman/botman": "^2.6",
+        "botman/driver-telegram": "^1.6",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
+        "irazasyed/telegram-bot-sdk": "^3.4",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
+        "psalm/plugin-laravel": "^1.4",
         "sentry/sentry": "^3.1",
         "sentry/sentry-laravel": "^2.2",
         "spatie/async": "^1.5",
         "spatie/data-transfer-object": "^2.6",
         "spatie/enum": "^3.6",
         "spatie/laravel-validation-rules": "^2.7",
-        "webmozart/assert": "^1.9",
-        "ext-pdo": "*",
-        "ext-json": "*"
+        "webmozart/assert": "^1.9"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.8",
@@ -36,7 +40,6 @@
         "phpmd/phpmd": "^2.9",
         "phpro/grumphp": "^1.1",
         "phpunit/phpunit": "^9.3.10",
-        "psalm/plugin-laravel": "^1.4",
         "roave/security-advisories": "dev-master",
         "squizlabs/php_codesniffer": "^3.5",
         "vimeo/psalm": "^4.2"
