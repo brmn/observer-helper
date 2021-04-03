@@ -46,7 +46,7 @@ abstract class Command
         foreach ($paramList as $name) {
             $params[$name] = null;
 
-            $pattern = "/{$name}=([^ $]*)( |$)/";
+            $pattern = "/ {$name}=([^ $]*)( |$)/";
 
             $matches = [];
 

@@ -113,7 +113,7 @@ final class Search extends Command
         }
 
         if (Arr::has($params, 'page')) {
-            $typedParams['perpage'] = (int)$params['page'];
+            $typedParams['page'] = (int)$params['page'];
         }
 
         return new PurchasesSearchQuery($typedParams);
