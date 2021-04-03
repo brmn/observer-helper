@@ -12,11 +12,11 @@ final class Inn
 
     private function __construct(string $value)
     {
-        Assert::true(strlen($value) === 10 || strlen($value) === 12, "wrong inn length {$value}");
+        Assert::true(strlen($value) === 10 || strlen($value) === 12, "wrong inn length");
 
-        Assert::regex($value, '/\d/', "wrong format {$value}");
+        Assert::regex($value, '/\d/', "wrong format");
 
-        Assert::true($this->isValidControl($value), "wrong control {$value}");
+        Assert::true($this->isValidControl($value), "wrong control");
 
         $this->value = $value;
     }
