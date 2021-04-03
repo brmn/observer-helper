@@ -30,6 +30,7 @@ use Validator;
 final class Search extends Command
 {
     protected const COMMAND = '/search';
+    protected const DESC = '/search inn=INN [perpage=10] [page=1] [products]';
 
     protected const VALIDATION_RULES = [
         'inn' => ['required'],
