@@ -38,7 +38,8 @@ final class UserSearchesPurchases
                             'perpage' => $query->perpage,
                             'page' => $query->page,
                         ]
-                    )
+                    ),
+                    'query' => $query,
                 ]
             );
         } catch (GuzzleException $e) {

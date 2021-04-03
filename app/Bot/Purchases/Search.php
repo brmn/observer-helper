@@ -15,8 +15,15 @@ use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use Exception;
 use InvalidArgumentException;
+use Log;
+use Str;
 use Webmozart\Assert\Assert;
 
+/**
+ * Class Search
+ * @package App\Bot\Purchases
+ * @SuppressWarnings("CouplingBetweenObjects")
+ */
 final class Search extends Command
 {
     protected const COMMAND = '/search';
@@ -45,7 +52,7 @@ final class Search extends Command
 
             return;
         } catch (Exception $e) {
-            \Log::error('bot search query', [$e->getMessage()]);
+            Log::error('bot search query', [$e->getMessage()]);
 
             $bot->reply("something went wrong");
 
@@ -55,7 +62,7 @@ final class Search extends Command
         try {
             $bot->reply($this->format($this->search->process($this->getUser($bot), $query)));
         } catch (Exception $e) {
-            \Log::error('bot search process', [$e->getMessage()]);
+            Log::error('bot search process', [$e->getMessage()]);
 
             $bot->reply("something went wrong");
         }
@@ -100,14 +107,19 @@ final class Search extends Command
 
     private function format(PurchasesSearchResult $searchResult): OutgoingMessage
     {
-        $result = "Contracts found {$searchResult->data['contracts']['total']}\n\n";
+        $result = "Contracts found {$searchResult->data['contracts']['total']}"
+            . " for inn {$searchResult->query->inn->getValue()} query {$searchResult->query->query}"
+            . " perpage {$searchResult->query->perpage} page {$searchResult->query->page}\n\n";
 
         foreach ($searchResult->data['contracts']['data'] as $contract) {
-            $result .= "signDate: {$contract['signDate']} / publishDate: {$contract['publishDate']}\n"
+            $result .= "signDate: {$contract['signDate']}\n"
+                . "publishDate: {$contract['publishDate']}\n"
                 . "price: {$contract['price']} {$contract['currency']['code']}\n"
-                . "products: " . implode('; ', array_column($contract['products'], 'name')) . "\n"
-                . "{$contract['contractUrl']}\n\n\n";
+                . "products: " . Str::limit(implode('; ', array_column($contract['products'], 'name')), 100) . "\n"
+                . "{$contract['contractUrl']}\n\n";
         }
+
+        $result .= "\nprev page(not implemented) next page(not implemented)";
 
         return OutgoingMessage::create($result);
     }
