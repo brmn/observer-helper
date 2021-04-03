@@ -84,6 +84,11 @@ final class Search extends Command
         return self::COMMAND . ' .*';
     }
 
+    public static function getDesc(): string
+    {
+        return self::DESC;
+    }
+
     protected function getParamList(): array
     {
         return array_keys(self::VALIDATION_RULES);

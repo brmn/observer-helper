@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Bot;
 
 use BotMan\BotMan\BotMan;
-use InvalidArgumentException;
 use Str;
 use Webmozart\Assert\Assert;
 
@@ -16,6 +15,8 @@ abstract class Command
     abstract public static function getCommand(): string;
 
     abstract public static function getCommandPattern(): string;
+
+    abstract public static function getDesc(): string;
 
     /**
      * @return array<string>

@@ -9,3 +9,5 @@ $bot->hears('hello', static function (\BotMan\BotMan\BotMan $bot) {
 });
 
 $bot->hears(\App\Bot\Purchases\Search::getCommandPattern(), '\App\Bot\Purchases\Search@handle');
+
+$bot->hears(\App\Bot\Help::getCommandPattern(), '\App\Bot\Help@handle');
