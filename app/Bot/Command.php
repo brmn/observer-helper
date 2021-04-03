@@ -44,8 +44,6 @@ abstract class Command
         unset($paramList[self::REST_OF_THE_QUERY]);
 
         foreach ($paramList as $name) {
-            $params[$name] = null;
-
             $pattern = "/(^| ){$name}=([^ $]*)($| )/";
 
             $matches = [];
@@ -54,7 +52,7 @@ abstract class Command
                 continue;
             }
 
-            $params[$name] = $matches[1];
+            $params[$name] = $matches[2];
 
             $paramString = (string)preg_replace($pattern, '', $paramString);
         }
