@@ -18,58 +18,50 @@ abstract class Command
     abstract public static function getCommandPattern(): string;
 
     /**
-     * @return array<string,array<string>>
+     * @return array<string>
      */
     abstract protected function getParamList(): array;
 
     /**
-     * @param non-empty-array<string,null|string> $params
-     * @return non-empty-array<string,mixed>
-     */
-    abstract protected function mapParams(array $params): array;
-
-    /**
      * @param BotMan $bot
-     * @return non-empty-array<string,mixed>
+     * @return array<string,string>
      */
     final protected function getParams(BotMan $bot): array
     {
-        return $this->mapParams($this->parseParams($this->getParamString($bot), $this->getParamList()));
+        return $this->parseParams($this->getParamString($bot), $this->getParamList());
     }
 
     /**
      * @param string $paramString
-     * @param array<string,array<string>> $paramList
-     * @return non-empty-array<string,null|string>
+     * @param array<string> $paramList
+     * @return array<string,string>
      * @SuppressWarnings("UndefinedVariable")
      */
     final private function parseParams(string $paramString, array $paramList): array
     {
         $params = [];
 
-        foreach ($paramList as $name => $rules) {
+        unset($paramList[self::REST_OF_THE_QUERY]);
+
+        foreach ($paramList as $name) {
             $params[$name] = null;
 
             $pattern = "/{$name}=([^ $]*)( |$)/";
 
             $matches = [];
 
-            if (preg_match($pattern, $paramString, $matches)) {
-                $params[$name] = $matches[1];
-
-                $paramString = (string)preg_replace($pattern, '', $paramString);
-
+            if (!preg_match($pattern, $paramString, $matches)) {
                 continue;
             }
 
-            if (in_array('required', $rules)) {
-                throw new InvalidArgumentException("absent {$name}");
-            }
+            $params[$name] = $matches[1];
+
+            $paramString = (string)preg_replace($pattern, '', $paramString);
         }
 
         $params[self::REST_OF_THE_QUERY] = empty($paramString) ? null : $paramString;
 
-        return $params;
+        return array_filter($params, static fn($value) => $value !== null);
     }
 
     final private function getParamString(BotMan $bot): string

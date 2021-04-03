@@ -11,26 +11,31 @@ use App\Shared\ValueObjects\Inn;
 use App\Usecases\Purchases\DTO\PurchasesSearchQuery;
 use App\Usecases\Purchases\DTO\PurchasesSearchResult;
 use App\Usecases\Purchases\UserSearchesPurchases;
+use Arr;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use Exception;
 use InvalidArgumentException;
 use Log;
 use Str;
-use Webmozart\Assert\Assert;
+use Validator;
 
 /**
  * Class Search
  * @package App\Bot\Purchases
  * @SuppressWarnings("CouplingBetweenObjects")
+ * @todo extract SearchQuery class
+ * @todo extract SearchFormatter class
  */
 final class Search extends Command
 {
     protected const COMMAND = '/search';
-    protected const PARAMS = [
+
+    protected const VALIDATION_RULES = [
         'inn' => ['required'],
-        'perpage' => ['int', 'max:50'],
-        'page' => ['int', 'max:10']
+        'perpage' => ['int', 'min:1', 'max:50'],
+        'page' => ['int', 'min:1', 'max:10'],
+        self::REST_OF_THE_QUERY => ['string', 'max:100'],
     ];
 
     private UserSearchesPurchases $search;
@@ -80,19 +85,7 @@ final class Search extends Command
 
     protected function getParamList(): array
     {
-        return self::PARAMS;
-    }
-
-    protected function mapParams(array $params): array
-    {
-        Assert::notNull($params['inn'], 'empty inn');
-
-        return [
-            'query' => empty($params[self::REST_OF_THE_QUERY]) ? null : $params[self::REST_OF_THE_QUERY],
-            'inn' => Inn::make($params['inn']),
-            'perpage' => (int)$params['perpage'],
-            'page' => (int)$params['page'],
-        ];
+        return array_keys(self::VALIDATION_RULES);
     }
 
     private function getUser(BotMan $bot): User
@@ -102,7 +95,28 @@ final class Search extends Command
 
     private function makeQuery(BotMan $bot): PurchasesSearchQuery
     {
-        return new PurchasesSearchQuery($this->getParams($bot));
+        $params = $this->getParams($bot);
+
+        $validator = Validator::make($params, self::VALIDATION_RULES);
+
+        if ($validator->fails()) {
+            throw new InvalidArgumentException($validator->errors()->toJson());
+        }
+
+        $typedParams = [
+            'inn' => Inn::make($params['inn']),
+            'query' => empty($params[self::REST_OF_THE_QUERY]) ? null : $params[self::REST_OF_THE_QUERY],
+        ];
+
+        if (Arr::has($params, 'perpage')) {
+            $typedParams['perpage'] = (int)$params['perpage'];
+        }
+
+        if (Arr::has($params, 'page')) {
+            $typedParams['perpage'] = (int)$params['page'];
+        }
+
+        return new PurchasesSearchQuery($typedParams);
     }
 
     private function format(PurchasesSearchResult $searchResult): OutgoingMessage

@@ -6,10 +6,11 @@
     </UndefinedClass>
   </file>
   <file src="app/Bot/Purchases/Search.php">
-    <UndefinedClass occurrences="3">
+    <UndefinedClass occurrences="4">
       <code>Log</code>
       <code>Log</code>
       <code>Str</code>
+      <code>Validator</code>
     </UndefinedClass>
   </file>
 </files>
