@@ -9,7 +9,7 @@ use App\Shared\Services\UserRepo;
 
 class UserRepoHardcode implements UserRepo
 {
-    public function getByTelegramId(string $id): User
+    public function getByTelegramId(int $id): User
     {
         // TODO: Implement getByTelegramId() method.
         return new User();

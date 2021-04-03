@@ -48,14 +48,14 @@ abstract class Command
         $params = [];
 
         foreach ($paramList as $name => $rules) {
-            $pattern = "/{$name}=([^ ])/";
+            $pattern = "/{$name}=([^ ]*)/";
 
             $matches = [];
 
             if (preg_match($pattern, $paramString, $matches)) {
                 $params[$name] = $matches[1];
 
-                preg_replace($pattern, '', $paramString);
+                $paramString = (string)preg_replace($pattern, '', $paramString);
 
                 continue;
             }

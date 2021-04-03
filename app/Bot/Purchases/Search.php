@@ -37,7 +37,7 @@ final class Search extends Command
         try {
             $query = $this->makeQuery($bot);
         } catch (InvalidArgumentException $e) {
-            $bot->reply("wrong command format {$e->getMessage()}");
+            $bot->reply("wrong command format: {$e->getMessage()}");
 
             return;
         }
@@ -45,7 +45,7 @@ final class Search extends Command
         try {
             $bot->reply($this->format($this->search->process($this->getUser($bot), $query)));
         } catch (Exception $e) {
-            $bot->reply('something went wrong');
+            $bot->reply("something went wrong: {$e->getMessage()}");
         }
     }
 
@@ -56,7 +56,7 @@ final class Search extends Command
 
     public static function getCommandPattern(): string
     {
-        return self::COMMAND . ' *';
+        return self::COMMAND . ' .*';
     }
 
     protected function getParamList(): array
@@ -76,7 +76,7 @@ final class Search extends Command
 
     private function getUser(BotMan $bot): User
     {
-        return $this->userRepo->getByTelegramId($bot->getUser()->getId());
+        return $this->userRepo->getByTelegramId((int)$bot->getUser()->getId());
     }
 
     private function makeQuery(BotMan $bot): PurchasesSearchQuery

@@ -8,6 +8,7 @@ use App\Clearspending\ClearspendingApi;
 use App\Shared\Entities\User;
 use App\Usecases\Purchases\DTO\PurchasesSearchQuery;
 use App\Usecases\Purchases\DTO\PurchasesSearchResult;
+use GuzzleHttp\Exception\GuzzleException;
 
 final class UserSearchesPurchases
 {
@@ -27,15 +28,19 @@ final class UserSearchesPurchases
      */
     public function process(User $user, PurchasesSearchQuery $query): PurchasesSearchResult
     {
-        return new PurchasesSearchResult(
-            [
-                'data' => $this->api->contractsSearch(
-                    [
-                        'productsearch' => $query->query,
-                        'customerinn' => $query->inn->getValue(),
-                    ]
-                )
-            ]
-        );
+        try {
+            return new PurchasesSearchResult(
+                [
+                    'data' => $this->api->contractsSearch(
+                        [
+                            'productsearch' => $query->query,
+                            'customerinn' => $query->inn->getValue(),
+                        ]
+                    )
+                ]
+            );
+        } catch (GuzzleException $e) {
+            return new PurchasesSearchResult(['data' => 'network error']);
+        }
     }
 }

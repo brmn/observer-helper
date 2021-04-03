@@ -8,5 +8,5 @@ use App\Shared\Entities\User;
 
 interface UserRepo
 {
-    public function getByTelegramId(string $id): User;
+    public function getByTelegramId(int $id): User;
 }
