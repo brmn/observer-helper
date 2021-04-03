@@ -134,8 +134,6 @@ final class Search extends Command
                 . "{$contract['contractUrl']}\n\n";
         }
 
-        $result .= "\nprev page(not implemented) next page(not implemented)";
-
         return OutgoingMessage::create($result);
     }
 }
