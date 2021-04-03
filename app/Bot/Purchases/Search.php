@@ -20,7 +20,11 @@ use Webmozart\Assert\Assert;
 final class Search extends Command
 {
     protected const COMMAND = '/search';
-    protected const PARAMS = ['inn' => ['required'], 'perpage' => ['int', 'max:50'], 'page' => ['int', 'max:10']];
+    protected const PARAMS = [
+        'inn' => ['required'],
+        'perpage' => ['int', 'max:50'],
+        'page' => ['int', 'max:10']
+    ];
 
     private UserSearchesPurchases $search;
     private UserRepo $userRepo;

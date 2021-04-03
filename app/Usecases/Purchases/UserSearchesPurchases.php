@@ -42,6 +42,10 @@ final class UserSearchesPurchases
                 ]
             );
         } catch (GuzzleException $e) {
+            if ($e->getCode() === 404) {
+                return new PurchasesSearchResult(['data' => ['contracts' => ['total' => 0, 'data' => []]]]);
+            }
+
             throw $e;
         }
     }

@@ -67,6 +67,7 @@ final class ClearspendingApi
             'placing',
             'fz',
             'perpage',
+            'page',
             'sort',
         ];
 
