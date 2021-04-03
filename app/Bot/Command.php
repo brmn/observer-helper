@@ -46,7 +46,7 @@ abstract class Command
         foreach ($paramList as $name) {
             $params[$name] = null;
 
-            $pattern = "/ {$name}=([^ $]*)( |$)/";
+            $pattern = "/(^| ){$name}=([^ $]*)($| )/";
 
             $matches = [];
 
@@ -59,7 +59,7 @@ abstract class Command
             $paramString = (string)preg_replace($pattern, '', $paramString);
         }
 
-        $params[self::REST_OF_THE_QUERY] = empty($paramString) ? null : $paramString;
+        $params[self::REST_OF_THE_QUERY] = empty(trim($paramString)) ? null : trim($paramString);
 
         return array_filter($params, static fn($value) => $value !== null);
     }
