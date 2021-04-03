@@ -48,7 +48,7 @@ abstract class Command
         $params = [];
 
         foreach ($paramList as $name => $rules) {
-            $pattern = "/{$name}=([^ ]*)/";
+            $pattern = "/{$name}=([^ $]*)( |$)/";
 
             $matches = [];
 

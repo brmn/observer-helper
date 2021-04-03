@@ -5,4 +5,10 @@
       <code>Str</code>
     </UndefinedClass>
   </file>
+  <file src="app/Bot/Purchases/Search.php">
+    <UndefinedClass occurrences="2">
+      <code>\Log</code>
+      <code>\Log</code>
+    </UndefinedClass>
+  </file>
 </files>

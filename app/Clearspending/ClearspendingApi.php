@@ -77,6 +77,8 @@ final class ClearspendingApi
             ]
         );
 
+//        \Log::info('clearspending api', [$response->getStatusCode()]);
+
         $result = Utils::jsonDecode($response->getBody()->getContents(), true);
 
         if ($result === null) {
@@ -96,8 +98,8 @@ final class ClearspendingApi
     {
         return array_filter(
             $query,
-            static fn(string $key): bool => in_array($key, $paramList, true),
-            ARRAY_FILTER_USE_KEY
+            static fn(?string $item, string $key): bool => in_array($key, $paramList, true) && $item !== null,
+            ARRAY_FILTER_USE_BOTH
         );
     }
 }

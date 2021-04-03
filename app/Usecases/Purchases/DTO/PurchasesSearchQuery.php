@@ -9,6 +9,8 @@ use Spatie\DataTransferObject\DataTransferObject;
 
 class PurchasesSearchQuery extends DataTransferObject
 {
-    public string $query;
+    public ?string $query;
     public Inn $inn;
+    public ?int $perpage;
+    public ?int $page;
 }

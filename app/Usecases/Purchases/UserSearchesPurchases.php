@@ -35,12 +35,14 @@ final class UserSearchesPurchases
                         [
                             'productsearch' => $query->query,
                             'customerinn' => $query->inn->getValue(),
+                            'perpage' => $query->perpage,
+                            'page' => $query->page,
                         ]
                     )
                 ]
             );
         } catch (GuzzleException $e) {
-            return new PurchasesSearchResult(['data' => 'network error']);
+            throw $e;
         }
     }
 }

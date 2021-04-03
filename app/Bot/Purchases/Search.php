@@ -20,7 +20,7 @@ use Webmozart\Assert\Assert;
 final class Search extends Command
 {
     protected const COMMAND = '/search';
-    protected const PARAMS = ['inn' => ['required']];
+    protected const PARAMS = ['inn' => ['required'], 'perpage' => ['int', 'max:50'], 'page' => ['int', 'max:10']];
 
     private UserSearchesPurchases $search;
     private UserRepo $userRepo;
@@ -40,12 +40,20 @@ final class Search extends Command
             $bot->reply("wrong command format: {$e->getMessage()}");
 
             return;
+        } catch (Exception $e) {
+            \Log::error('bot search query', [$e->getMessage()]);
+
+            $bot->reply("something went wrong");
+
+            return;
         }
 
         try {
             $bot->reply($this->format($this->search->process($this->getUser($bot), $query)));
         } catch (Exception $e) {
-            $bot->reply("something went wrong: {$e->getMessage()}");
+            \Log::error('bot search process', [$e->getMessage()]);
+
+            $bot->reply("something went wrong");
         }
     }
 
@@ -69,8 +77,10 @@ final class Search extends Command
         Assert::notNull($params['inn'], 'empty inn');
 
         return [
-            'query' => $params[self::REST_OF_THE_QUERY],
-            'inn' => Inn::make($params['inn'])
+            'query' => empty($params[self::REST_OF_THE_QUERY]) ? null : $params[self::REST_OF_THE_QUERY],
+            'inn' => Inn::make($params['inn']),
+            'perpage' => (int)$params['perpage'],
+            'page' => (int)$params['page'],
         ];
     }
 
@@ -86,8 +96,15 @@ final class Search extends Command
 
     private function format(PurchasesSearchResult $searchResult): OutgoingMessage
     {
-        //@todo
+        $result = "Contracts found {$searchResult->data['contracts']['total']}\n\n";
 
-        return OutgoingMessage::create($searchResult->__toString());
+        foreach ($searchResult->data['contracts']['data'] as $contract) {
+            $result .= "signDate: {$contract['signDate']} / publishDate: {$contract['publishDate']}\n"
+                . "price: {$contract['price']} {$contract['currency']['code']}\n"
+                . "products: " . implode('; ', array_column($contract['products'], 'name')) . "\n"
+                . "{$contract['contractUrl']}\n\n\n";
+        }
+
+        return OutgoingMessage::create($result);
     }
 }
