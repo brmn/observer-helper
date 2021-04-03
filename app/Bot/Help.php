@@ -40,7 +40,7 @@ final class Help extends Command
 
     public static function getCommandPattern(): string
     {
-        return self::COMMAND;
+        return "^" . self::COMMAND;
     }
 
     public static function getDesc(): string

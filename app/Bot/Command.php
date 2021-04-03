@@ -65,7 +65,7 @@ abstract class Command
 
     final private function getParamString(BotMan $bot): string
     {
-        Assert::startsWith($bot->getMessage()->getText(), static::getCommand() . ' ');
+        Assert::startsWith($bot->getMessage()->getText(), static::getCommand());
 
         return Str::replaceFirst(static::getCommand() . ' ', '', $bot->getMessage()->getText());
     }

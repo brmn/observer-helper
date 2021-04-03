@@ -30,7 +30,7 @@ use Validator;
 final class Search extends Command
 {
     protected const COMMAND = '/search';
-    protected const DESC = '/search inn=INN [perpage=10] [page=1] [products]';
+    protected const DESC = '/search inn=10_or_12_digits [perpage=10] [page=1] [query]';
 
     protected const VALIDATION_RULES = [
         'inn' => ['required'],
@@ -55,6 +55,7 @@ final class Search extends Command
             $query = $this->makeQuery($bot);
         } catch (InvalidArgumentException $e) {
             $bot->reply("wrong command format: {$e->getMessage()}");
+            $bot->reply("Usage: " . self::getDesc());
 
             return;
         } catch (Exception $e) {
@@ -81,7 +82,7 @@ final class Search extends Command
 
     public static function getCommandPattern(): string
     {
-        return self::COMMAND . ' .*';
+        return "^" . self::COMMAND . '.*';
     }
 
     public static function getDesc(): string
