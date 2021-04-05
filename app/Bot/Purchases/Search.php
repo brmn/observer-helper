@@ -40,7 +40,7 @@ TAG;
         'inn' => ['required'],
         'perpage' => ['int', 'min:1', 'max:50'],
         'page' => ['int', 'min:1', 'max:10'],
-        'datefrom' => ['date_format:Y-m-d', 'lte:dateto'],
+        'datefrom' => ['date_format:Y-m-d'],
         'dateto' => ['date_format:Y-m-d'],
         self::REST_OF_THE_QUERY => ['string', 'max:100'],
     ];

@@ -60,6 +60,6 @@ final class UserSearchesPurchases
 
     private function getDateRange(PurchasesSearchQuery $query): string
     {
-        return "{$query->dateFrom->format('d.m.Y')}-{$this->$query->format('d.m.Y')}";
+        return "{$query->dateFrom->format('d.m.Y')}-{$query->dateTo->format('d.m.Y')}";
     }
 }

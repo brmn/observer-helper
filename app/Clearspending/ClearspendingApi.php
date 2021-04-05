@@ -72,7 +72,7 @@ final class ClearspendingApi
         ];
 
         $response = $this->http->get(
-            self::BASE_URL . 'contracts/search1/',
+            self::BASE_URL . 'contracts/search/',
             [
                 'query' => $this->filterParams($query, $paramList),
             ]

@@ -7,6 +7,7 @@ namespace App\Usecases\Purchases\DTO;
 use App\Shared\ValueObjects\Inn;
 use Carbon\Carbon;
 use Spatie\DataTransferObject\DataTransferObject;
+use Webmozart\Assert\Assert;
 
 final class PurchasesSearchQuery extends DataTransferObject
 {
@@ -25,6 +26,8 @@ final class PurchasesSearchQuery extends DataTransferObject
         $parameters['page'] ??= 1;
         $parameters['dateFrom'] ??= Carbon::createFromFormat('Y-m-d', '2000-01-01');
         $parameters['dateTo'] ??= Carbon::now();
+
+        Assert::lessThanEq($parameters['dateFrom'], $parameters['dateTo']);
 
         parent::__construct($parameters);
     }
