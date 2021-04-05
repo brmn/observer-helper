@@ -73,7 +73,9 @@ TAG;
         }
 
         try {
-            $bot->reply($this->format($this->search->process($this->getUser($bot), $query)));
+            foreach ($this->format($this->search->process($this->getUser($bot), $query)) as $message) {
+                $bot->reply($message);
+            }
         } catch (Exception $e) {
             Log::error('bot search process', [$e->getMessage()]);
 
@@ -130,30 +132,46 @@ TAG;
         }
 
         if (Arr::has($params, 'datefrom')) {
-            $typedParams['datefrom'] = Carbon::createFromFormat('Y-m-d', $params['datefrom']);
+            $typedParams['dateFrom'] = Carbon::createFromFormat('Y-m-d', $params['datefrom']);
         }
 
         if (Arr::has($params, 'dateto')) {
-            $typedParams['dateto'] = Carbon::createFromFormat('Y-m-d', $params['dateto']);
+            $typedParams['dateTo'] = Carbon::createFromFormat('Y-m-d', $params['dateto']);
         }
 
         return new PurchasesSearchQuery($typedParams);
     }
 
-    private function format(PurchasesSearchResult $searchResult): OutgoingMessage
+    /**
+     * @param PurchasesSearchResult $searchResult
+     * @return array<OutgoingMessage>
+     */
+    private function format(PurchasesSearchResult $searchResult): array
     {
-        $result = "Contracts found {$searchResult->data['contracts']['total']}"
+        $messages = [];
+
+        $message = "Contracts found {$searchResult->data['contracts']['total']}"
             . " for inn {$searchResult->query->inn->getValue()} query {$searchResult->query->query}"
             . " perpage {$searchResult->query->perpage} page {$searchResult->query->page}\n\n";
 
-        foreach ($searchResult->data['contracts']['data'] as $contract) {
-            $result .= "signDate: {$contract['signDate']}\n"
-                . "publishDate: {$contract['publishDate']}\n"
-                . "price: {$contract['price']} {$contract['currency']['code']}\n"
-                . "products: " . Str::limit(implode('; ', array_column($contract['products'], 'name')), 100) . "\n"
-                . "{$contract['contractUrl']}\n\n";
+        if (!count($searchResult->data['contracts']['data'])) {
+            return [OutgoingMessage::create($message)];
         }
 
-        return OutgoingMessage::create($result);
+        foreach (array_chunk($searchResult->data['contracts']['data'], 10) as $chunk) {
+            foreach ($chunk as $contract) {
+                $message .= "signDate: {$contract['signDate']}\n"
+                    . "publishDate: {$contract['publishDate']}\n"
+                    . "price: {$contract['price']} {$contract['currency']['code']}\n"
+                    . "products: " . Str::limit(implode('; ', array_column($contract['products'], 'name')), 100) . "\n"
+                    . "{$contract['contractUrl']}\n\n";
+            }
+
+            $messages[] = OutgoingMessage::create($message);
+
+            $message = '';
+        }
+
+        return $messages;
     }
 }
