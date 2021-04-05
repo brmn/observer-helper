@@ -14,6 +14,7 @@ use App\Usecases\Purchases\UserSearchesPurchases;
 use Arr;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
+use Carbon\Carbon;
 use Exception;
 use InvalidArgumentException;
 use Log;
@@ -29,13 +30,18 @@ use Validator;
  */
 final class Search extends Command
 {
-    protected const COMMAND = '/search';
-    protected const DESC = '/search inn=10_or_12_digits [perpage=10] [page=1] [query]';
+    protected const COMMAND = '/searchtest';
+    protected const DESC = <<<'TAG'
+/searchtest inn=10_or_12_digits [perpage=10] [page=1] [datefrom=yyyy-mm-dd] [dateto=yyyy-mm-dd] [query]
+TAG;
+
 
     protected const VALIDATION_RULES = [
         'inn' => ['required'],
         'perpage' => ['int', 'min:1', 'max:50'],
         'page' => ['int', 'min:1', 'max:10'],
+        'datefrom' => ['date_format:Y-m-d', 'lte:dateto'],
+        'dateto' => ['date_format:Y-m-d'],
         self::REST_OF_THE_QUERY => ['string', 'max:100'],
     ];
 
@@ -121,6 +127,14 @@ final class Search extends Command
 
         if (Arr::has($params, 'page')) {
             $typedParams['page'] = (int)$params['page'];
+        }
+
+        if (Arr::has($params, 'datefrom')) {
+            $typedParams['datefrom'] = Carbon::createFromFormat('Y-m-d', $params['datefrom']);
+        }
+
+        if (Arr::has($params, 'dateto')) {
+            $typedParams['dateto'] = Carbon::createFromFormat('Y-m-d', $params['dateto']);
         }
 
         return new PurchasesSearchQuery($typedParams);

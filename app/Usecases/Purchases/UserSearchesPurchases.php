@@ -37,6 +37,8 @@ final class UserSearchesPurchases
                             'customerinn' => $query->inn->getValue(),
                             'perpage' => $query->perpage,
                             'page' => $query->page,
+                            'daterange' => $this->getDateRange($query),
+                            'sort' => $query->sortBy,
                         ]
                     ),
                     'query' => $query,
@@ -54,5 +56,10 @@ final class UserSearchesPurchases
 
             throw $e;
         }
+    }
+
+    private function getDateRange(PurchasesSearchQuery $query): string
+    {
+        return "{$query->dateFrom->format('d.m.Y')}-{$this->$query->format('d.m.Y')}";
     }
 }
