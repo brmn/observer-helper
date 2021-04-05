@@ -72,13 +72,13 @@ final class ClearspendingApi
         ];
 
         $response = $this->http->get(
-            self::BASE_URL . 'contracts/search/',
+            self::BASE_URL . 'contracts/search1/',
             [
                 'query' => $this->filterParams($query, $paramList),
             ]
         );
 
-//        \Log::info('clearspending api', [$response->getStatusCode()]);
+        \Log::info('clearspending api', [$response->getStatusCode()]);
 
         $result = Utils::jsonDecode($response->getBody()->getContents(), true);
 

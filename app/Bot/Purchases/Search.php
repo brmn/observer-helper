@@ -30,9 +30,9 @@ use Validator;
  */
 final class Search extends Command
 {
-    protected const COMMAND = '/searchtest';
+    protected const COMMAND = '/search';
     protected const DESC = <<<'TAG'
-/searchtest inn=10_or_12_digits [perpage=10] [page=1] [datefrom=yyyy-mm-dd] [dateto=yyyy-mm-dd] [query]
+/search inn=10_or_12_digits [perpage=10] [page=1] [datefrom=yyyy-mm-dd] [dateto=yyyy-mm-dd] [query]
 TAG;
 
 
