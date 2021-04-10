@@ -11,6 +11,16 @@ Route::post(
     static function () {
         Log::info('webhook /botman-nwco974ytb23t', [Request::all()]);
 
-        app()->make('botman')->listen();
+        $bot = app()->make('botman');
+
+        $bot->hears('hello', static function (\BotMan\BotMan\BotMan $bot) {
+            $bot->reply('world');
+        });
+
+        $bot->hears(\App\Bot\Purchases\Search::getCommandPattern(), '\App\Bot\Purchases\Search@handle');
+
+        $bot->hears(\App\Bot\Help::getCommandPattern(), '\App\Bot\Help@handle');
+
+        $bot->listen();
     }
 );
