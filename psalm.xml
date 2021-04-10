@@ -18,5 +18,5 @@
             <file name=".phpstorm.meta.php"/>
         </ignoreFiles>
     </projectFiles>
-<!--<plugins><pluginClass class="Psalm\LaravelPlugin\Plugin"/></plugins>-->
+<plugins><pluginClass class="Psalm\LaravelPlugin\Plugin"/></plugins>
 </psalm>
