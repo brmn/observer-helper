@@ -10,7 +10,9 @@ use App\Shared\ValueObjects\Inn;
 use App\Usecases\Watchlists\UserAddsInnToWatchlist;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
+use Exception;
 use InvalidArgumentException;
+use Log;
 use Validator;
 
 final class WatchlistAddInn extends Command
@@ -55,18 +57,37 @@ TAG;
 
     public function handle(BotMan $bot): void
     {
-        $params = $this->getParams($bot);
+        try {
+            $params = $this->getParams($bot);
 
-        $validator = Validator::make($params, self::VALIDATION_RULES);
+            $validator = Validator::make($params, self::VALIDATION_RULES);
 
-        if ($validator->fails()) {
-            throw new InvalidArgumentException($validator->errors()->toJson());
+            if ($validator->fails()) {
+                throw new InvalidArgumentException($validator->errors()->toJson());
+            }
+
+            $inn = Inn::make($params['inn']);
+        } catch (InvalidArgumentException $e) {
+            $bot->reply("wrong command format: {$e->getMessage()}");
+            $bot->reply("Usage: " . self::getDesc());
+
+            return;
+        } catch (Exception $e) {
+            Log::error('bot search query', [$e->getMessage()]);
+
+            $bot->reply("something went wrong");
+
+            return;
         }
 
-        $inn = Inn::make($params['inn']);
+        try {
+            $this->watchlist->process($this->getUser($bot), $inn);
 
-        $this->watchlist->process($this->getUser($bot), $inn);
+            $bot->reply(OutgoingMessage::create("test inn {$inn->getValue()} added"));
+        } catch (Exception $e) {
+            Log::error('bot search process', [$e->getMessage()]);
 
-        $bot->reply(OutgoingMessage::create("test inn {$inn->getValue()} added"));
+            $bot->reply("something went wrong");
+        }
     }
 }
