@@ -22,7 +22,7 @@ Route::post(
 
         $bot->hears(Help::getCommandPattern(), '\App\Bot\Help@handle');
 
-        $bot->hears(PurchasesSearch::getCommandPattern(), '\App\Bot\Purchases\Search@handle');
+        $bot->hears(PurchasesSearch::getCommandPattern(), '\App\Bot\Purchases\PurchasesSearch@handle');
 
         $bot->hears(WatchlistAddInn::getCommandPattern(), '\App\Bot\Watchlists\Inn\WatchlistAddInn@handle');
 
