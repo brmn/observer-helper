@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Bot;
 
-use App\Bot\Purchases\Search;
+use App\Bot\Purchases\PurchasesSearch;
+use App\Bot\Watchlists\Inn\WatchlistAddInn;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use Exception;
@@ -19,7 +20,8 @@ final class Help extends Command
 
     private const COMMANDS = [
         Help::class,
-        Search::class,
+        PurchasesSearch::class,
+        WatchlistAddInn::class,
     ];
 
     public function handle(BotMan $bot): void

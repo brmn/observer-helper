@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Bot;
 
+use App\Shared\Entities\User;
+use App\Shared\Services\UserRepo;
 use BotMan\BotMan\BotMan;
 use Str;
 use Webmozart\Assert\Assert;
@@ -11,6 +13,13 @@ use Webmozart\Assert\Assert;
 abstract class Command
 {
     protected const REST_OF_THE_QUERY = 'rest_of_the_query';
+
+    protected UserRepo $userRepo;
+
+    public function __construct(UserRepo $userRepo)
+    {
+        $this->userRepo = $userRepo;
+    }
 
     abstract public static function getCommand(): string;
 
@@ -22,6 +31,11 @@ abstract class Command
      * @return array<string>
      */
     abstract protected function getParamList(): array;
+
+    final protected function getUser(BotMan $bot): User
+    {
+        return $this->userRepo->getByTelegramId((int)$bot->getUser()->getId());
+    }
 
     /**
      * @param BotMan $bot
@@ -60,7 +74,7 @@ abstract class Command
 
         $params[self::REST_OF_THE_QUERY] = empty(trim($paramString)) ? null : trim($paramString);
 
-        return array_filter($params, static fn($value) => $value !== null);
+        return array_filter($params, static fn ($value) => $value !== null);
     }
 
     final private function getParamString(BotMan $bot): string

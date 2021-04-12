@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Bot\Purchases;
 
 use App\Bot\Command;
-use App\Shared\Entities\User;
 use App\Shared\Services\UserRepo;
 use App\Shared\ValueObjects\Inn;
 use App\Usecases\Purchases\DTO\PurchasesSearchQuery;
@@ -28,16 +27,15 @@ use Validator;
  * @todo extract SearchQuery class
  * @todo extract SearchFormatter class
  */
-final class Search extends Command
+final class PurchasesSearch extends Command
 {
     protected const COMMAND = '/search';
     protected const DESC = <<<'TAG'
 /search inn=10_or_12_digits [perpage=10] [page=1] [datefrom=yyyy-mm-dd] [dateto=yyyy-mm-dd] [query]
 TAG;
 
-
     protected const VALIDATION_RULES = [
-        'inn' => ['required'],
+        'inn' => ['required', 'int'],
         'perpage' => ['int', 'min:1', 'max:50'],
         'page' => ['int', 'min:1', 'max:10'],
         'datefrom' => ['date_format:Y-m-d'],
@@ -46,13 +44,32 @@ TAG;
     ];
 
     private UserSearchesPurchases $search;
-    private UserRepo $userRepo;
 
     public function __construct(UserSearchesPurchases $search, UserRepo $userRepo)
     {
-        $this->search = $search;
+        parent::__construct($userRepo);
 
-        $this->userRepo = $userRepo;
+        $this->search = $search;
+    }
+
+    public static function getCommand(): string
+    {
+        return self::COMMAND;
+    }
+
+    public static function getCommandPattern(): string
+    {
+        return "^" . self::COMMAND . '.*';
+    }
+
+    public static function getDesc(): string
+    {
+        return self::DESC;
+    }
+
+    protected function getParamList(): array
+    {
+        return array_keys(self::VALIDATION_RULES);
     }
 
     public function handle(BotMan $bot): void
@@ -81,31 +98,6 @@ TAG;
 
             $bot->reply("something went wrong");
         }
-    }
-
-    public static function getCommand(): string
-    {
-        return self::COMMAND;
-    }
-
-    public static function getCommandPattern(): string
-    {
-        return "^" . self::COMMAND . '.*';
-    }
-
-    public static function getDesc(): string
-    {
-        return self::DESC;
-    }
-
-    protected function getParamList(): array
-    {
-        return array_keys(self::VALIDATION_RULES);
-    }
-
-    private function getUser(BotMan $bot): User
-    {
-        return $this->userRepo->getByTelegramId((int)$bot->getUser()->getId());
     }
 
     private function makeQuery(BotMan $bot): PurchasesSearchQuery

@@ -1,5 +1,8 @@
 <?php
 
+use App\Bot\Help;
+use App\Bot\Purchases\PurchasesSearch;
+use App\Bot\Watchlists\Inn\WatchlistAddInn;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,9 +20,11 @@ Route::post(
             $bot->reply('world');
         });
 
-        $bot->hears(\App\Bot\Purchases\Search::getCommandPattern(), '\App\Bot\Purchases\Search@handle');
+        $bot->hears(Help::getCommandPattern(), '\App\Bot\Help@handle');
 
-        $bot->hears(\App\Bot\Help::getCommandPattern(), '\App\Bot\Help@handle');
+        $bot->hears(PurchasesSearch::getCommandPattern(), '\App\Bot\Purchases\Search@handle');
+
+        $bot->hears(WatchlistAddInn::getCommandPattern(), '\App\Bot\Watchlists\Inn\WatchlistAddInn@handle');
 
         $bot->listen();
     }
