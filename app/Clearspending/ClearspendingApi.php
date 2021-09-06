@@ -99,7 +99,7 @@ final class ClearspendingApi
     {
         return array_filter(
             $query,
-            static fn(?string $item, string $key): bool => in_array($key, $paramList, true) && $item !== null,
+            static fn (?string $item, string $key): bool => in_array($key, $paramList, true) && $item !== null,
             ARRAY_FILTER_USE_BOTH
         );
     }

@@ -58,7 +58,7 @@ final class Help extends Command
     private function getHelp(): OutgoingMessage
     {
         return OutgoingMessage::create(
-            implode("\n\n", array_map(static fn(string $command) => $command::getDesc(), self::COMMANDS))
+            implode("\n\n", array_map(static fn (string $command) => $command::getDesc(), self::COMMANDS))
         );
     }
 }

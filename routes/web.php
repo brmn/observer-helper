@@ -3,6 +3,9 @@
 use App\Bot\Help;
 use App\Bot\Purchases\PurchasesSearch;
 use App\Bot\Watchlists\Inn\WatchlistAddInn;
+use BotMan\BotMan\BotManFactory;
+use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\Drivers\Telegram\TelegramDriver;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -27,5 +30,28 @@ Route::post(
         $bot->hears(WatchlistAddInn::getCommandPattern(), '\App\Bot\Watchlists\Inn\WatchlistAddInn@handle');
 
         $bot->listen();
+    }
+);
+
+Route::post(
+    '/botman-NP24YNV6TW77RRHH',
+    static function () {
+        Log::info('webhook /botman-NP24YNV6TW77RRHH', [Request::all()]);
+
+        $config = [
+            "telegram" => [
+                "token" => config('botman.telegrams.VoteAbroadHotDogBot.token'),
+            ],
+        ];
+
+        DriverManager::loadDriver(TelegramDriver::class);
+
+        $botman = BotManFactory::create($config);
+
+        $botman->hears('hello', function (BotMan $bot) {
+            $bot->reply('Hello yourself.');
+        });
+
+        $botman->listen();
     }
 );

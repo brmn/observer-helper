@@ -52,7 +52,7 @@ abstract class Command
      * @return array<string,string>
      * @SuppressWarnings("UndefinedVariable")
      */
-    final private function parseParams(string $paramString, array $paramList): array
+    private function parseParams(string $paramString, array $paramList): array
     {
         $params = [];
 
@@ -77,7 +77,7 @@ abstract class Command
         return array_filter($params, static fn ($value) => $value !== null);
     }
 
-    final private function getParamString(BotMan $bot): string
+    private function getParamString(BotMan $bot): string
     {
         Assert::startsWith($bot->getMessage()->getText(), static::getCommand());
 
