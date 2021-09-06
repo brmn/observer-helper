@@ -48,8 +48,29 @@ Route::post(
 
         $botman = BotManFactory::create($config);
 
-        $botman->hears('hello', function (BotMan $bot) {
+        $botman->hears('hello', static function (\BotMan\BotMan\BotMan $bot) {
             $bot->reply('Hello yourself.');
+        });
+
+        $botman->hears('/start', static function (\BotMan\BotMan\BotMan $bot) {
+            $bot->reply(
+                "Задавайте вопросы в таком формате\n\n"
+                . "такой вопрос номер_УИКа статус(псг|наблюдтатель|другое) текст вопроса\n\n"
+                . "Например\n\n"
+                . "такой вопрос 8158 псг кто там?\n\n"
+            );
+        });
+
+        $botman->hears('^такой вопрос (.*)', static function (\BotMan\BotMan\BotMan $bot, $query) {
+            //@todo validate uik, asker status, text
+            //@todo parse to Ticket
+            //@todo save ticket
+
+            $asker = "@{$bot->getUser()->getUsername()} ({$bot->getUser()->getFirstName()}"
+                . " {$bot->getUser()->getLastName()}, {$bot->getUser()->getId()})";
+            $bot->reply("специально обученные люди ищут ответ, терпение");
+
+            $bot->say("$asker: $query", [-546996460], TelegramDriver::class);
         });
 
         $botman->listen();
