@@ -2,6 +2,7 @@
 
 use App\Bot\Help;
 use App\Bot\Purchases\PurchasesSearch;
+use App\Bot\Voteabroad\Observer\AskQuestion;
 use App\Bot\Watchlists\Inn\WatchlistAddInn;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Drivers\DriverManager;
@@ -39,40 +40,25 @@ Route::post(
         Log::info('webhook /botman-NP24YNV6TW77RRHH', [Request::all()]);
 
         $config = [
-            "telegram" => [
+            'telegram' => [
                 "token" => config('botman.telegrams.VoteAbroadHotDogBot.token'),
             ],
         ];
 
         DriverManager::loadDriver(TelegramDriver::class);
 
-        $botman = BotManFactory::create($config);
+        $bot = BotManFactory::create($config);
 
-        $botman->hears('hello', static function (\BotMan\BotMan\BotMan $bot) {
+        $bot->hears('hello', static function (\BotMan\BotMan\BotMan $bot) {
             $bot->reply('Hello yourself.');
         });
 
-        $botman->hears('/start', static function (\BotMan\BotMan\BotMan $bot) {
-            $bot->reply(
-                "Задавайте вопросы в таком формате\n\n"
-                . "такой вопрос номер_УИКа статус(псг|наблюдтатель|другое) текст вопроса\n\n"
-                . "Например\n\n"
-                . "такой вопрос 8158 псг кто там?\n\n"
-            );
+        $bot->hears('/start', static function (\BotMan\BotMan\BotMan $bot) {
+            $bot->reply(AskQuestion::getDesc());
         });
 
-        $botman->hears('^такой вопрос (.*)', static function (\BotMan\BotMan\BotMan $bot, $query) {
-            //@todo validate uik, asker status, text
-            //@todo parse to Ticket
-            //@todo save ticket
+        $bot->hears(AskQuestion::getCommandPattern(), AskQuestion::class . '@handle');
 
-            $asker = "@{$bot->getUser()->getUsername()} ({$bot->getUser()->getFirstName()}"
-                . " {$bot->getUser()->getLastName()}, {$bot->getUser()->getId()})";
-            $bot->reply("специально обученные люди ищут ответ, терпение");
-
-            $bot->say("$asker: $query", [-546996460], TelegramDriver::class);
-        });
-
-        $botman->listen();
+        $bot->listen();
     }
 );

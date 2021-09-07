@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Bot\Purchases;
 
 use App\Bot\Command;
+use App\Shared\Entities\User;
 use App\Shared\Services\UserRepo;
 use App\Shared\ValueObjects\Inn;
 use App\Usecases\Purchases\DTO\PurchasesSearchQuery;
@@ -43,13 +44,15 @@ TAG;
         self::REST_OF_THE_QUERY => ['string', 'max:100'],
     ];
 
+    protected UserRepo $userRepo;
+
     private UserSearchesPurchases $search;
 
     public function __construct(UserSearchesPurchases $search, UserRepo $userRepo)
     {
-        parent::__construct($userRepo);
-
         $this->search = $search;
+
+        $this->userRepo = $userRepo;
     }
 
     public static function getCommand(): string
@@ -165,5 +168,10 @@ TAG;
         }
 
         return $messages;
+    }
+
+    private function getUser(BotMan $bot): User
+    {
+        return $this->userRepo->getByTelegramId((int)$bot->getUser()->getId());
     }
 }

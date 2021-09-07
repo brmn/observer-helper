@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Bot\Watchlists\Inn;
 
 use App\Bot\Command;
+use App\Shared\Entities\User;
 use App\Shared\Services\UserRepo;
 use App\Shared\ValueObjects\Inn;
 use App\Usecases\Watchlists\UserAddsInnToWatchlist;
@@ -26,13 +27,16 @@ TAG;
         'inn' => ['required', 'int'],
         self::REST_OF_THE_QUERY => ['string', 'max:100'],
     ];
+
     private UserAddsInnToWatchlist $watchlist;
+
+    private UserRepo $userRepo;
 
     public function __construct(UserAddsInnToWatchlist $watchlist, UserRepo $userRepo)
     {
-        parent::__construct($userRepo);
-
         $this->watchlist = $watchlist;
+
+        $this->userRepo = $userRepo;
     }
 
     public static function getCommand(): string
@@ -89,5 +93,10 @@ TAG;
 
             $bot->reply("something went wrong");
         }
+    }
+
+    private function getUser(BotMan $bot): User
+    {
+        return $this->userRepo->getByTelegramId((int)$bot->getUser()->getId());
     }
 }

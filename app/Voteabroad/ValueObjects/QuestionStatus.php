@@ -11,7 +11,7 @@ use Spatie\Enum\Enum;
  * @method static self assigned()
  * @method static self closed()
  */
-class TicketStatus extends Enum
+class QuestionStatus extends Enum
 {
     protected static function values(): array
     {
