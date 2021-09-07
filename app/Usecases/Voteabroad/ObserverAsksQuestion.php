@@ -79,7 +79,7 @@ final class ObserverAsksQuestion
      */
     private function makeMessage(Question $question): string
     {
-        return "{$question->getObserver()->asString()} {$question->getUik()->getNumber()} "
-            . ": {$question->getText()}";
+        return "УИК {$question->getUik()->getNumber()} {$question->getObserver()->asString()}: "
+            . "{$question->getText()}";
     }
 }

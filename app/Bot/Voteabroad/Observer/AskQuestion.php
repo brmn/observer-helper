@@ -39,7 +39,7 @@ TAG;
     {
         $this->observerAsksQuestion = $observerAsksQuestion;
 
-        $this->queryRegex = '/(\d){1,5} (' . implode('|', ObserverStatus::toLabels()) . ') (.*)/ui';
+        $this->queryRegex = '/(\d{1,5}) (' . implode('|', ObserverStatus::toLabels()) . ') (.*)/ui';
 
         $this->validationRules = [
             'uik' => ['required', 'int', 'min:1', 'max:99999'],
@@ -79,7 +79,7 @@ TAG;
                     [
                         'observer' => Observer::make(
                             TelegramUsername::make($bot->getUser()->getUsername()),
-                            ObserverStatus::from($parsedQuery['observer_status'])
+                            ObserverStatus::from(array_flip(ObserverStatus::toArray())[$parsedQuery['observer_status']])
                         ),
                         'uik' => UIK::make((int)$parsedQuery['uik']),
                         'text' => $parsedQuery['text'],

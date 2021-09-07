@@ -25,6 +25,6 @@ final class Observer
 
     public function asString(): string
     {
-        return "{$this->status->value} @{$this->username->value()}";
+        return "{$this->status->label} @{$this->username->value()}";
     }
 }
