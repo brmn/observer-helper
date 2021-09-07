@@ -56,11 +56,7 @@ final class ObserverAsksQuestion
     {
         //@todo add question id
         //
-        $this->bot->say(
-            "{$question->getObserver()->asString()}: {$question->getText()}",
-            $this->getChatIds(),
-            TelegramDriver::class
-        );
+        $this->bot->say($this->makeMessage($question), $this->getChatIds(), TelegramDriver::class);
     }
 
     /**
@@ -75,5 +71,15 @@ final class ObserverAsksQuestion
                 $this->config['test_chat_id']
             ]
         );
+    }
+
+    /**
+     * @param Question $question
+     * @return string
+     */
+    private function makeMessage(Question $question): string
+    {
+        return "{$question->getObserver()->asString()} {$question->getUik()->getNumber()} "
+            . ": {$question->getText()}";
     }
 }

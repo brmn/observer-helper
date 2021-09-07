@@ -12,8 +12,7 @@ final class TelegramUsername
 
     private function __construct(string $username)
     {
-        Assert::minLength($username, 2);
-        Assert::startsWith($username, '@');
+        Assert::notEmpty($username);
 
         $this->username = $username;
     }

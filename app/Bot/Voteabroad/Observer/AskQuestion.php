@@ -43,7 +43,7 @@ TAG;
 
         $this->validationRules = [
             'uik' => ['required', 'int', 'min:1', 'max:99999'],
-            'observer_status' => ['required', 'in:' . implode('|', ObserverStatus::toLabels())],
+            'observer_status' => ['required', 'in:' . implode(',', ObserverStatus::toLabels())],
             'text' => ['string', 'max:1000'],
         ];
     }
@@ -68,8 +68,7 @@ TAG;
         try {
             $parsedQuery = $this->parseQuery($query);
         } catch (Exception $e) {
-            $bot->reply("Неверный формат запроса: {$e->getMessage()}");
-            $bot->reply("Usage: " . self::getDesc());
+            $bot->reply("Неверный формат запроса: {$e->getMessage()}\n\n" . self::getDesc());
 
             return;
         }
@@ -78,7 +77,10 @@ TAG;
             $this->observerAsksQuestion->process(
                 new ObserverAskQuestionDTO(
                     [
-                        'observer' => Observer::make(TelegramUsername::make($bot->getUser()->getUsername())),
+                        'observer' => Observer::make(
+                            TelegramUsername::make($bot->getUser()->getUsername()),
+                            ObserverStatus::from($parsedQuery['observer_status'])
+                        ),
                         'uik' => UIK::make((int)$parsedQuery['uik']),
                         'text' => $parsedQuery['text'],
                     ]

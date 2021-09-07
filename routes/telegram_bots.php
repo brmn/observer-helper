@@ -49,6 +49,8 @@ Route::post(
 
         $bot = BotManFactory::create($config);
 
+        $bot->setContainer(app());
+
         $bot->hears('hello', static function (\BotMan\BotMan\BotMan $bot) {
             $bot->reply('Hello yourself.');
         });
@@ -57,7 +59,7 @@ Route::post(
             $bot->reply(AskQuestion::getDesc());
         });
 
-        $bot->hears(AskQuestion::getCommandPattern(), AskQuestion::class . '@handle');
+        $bot->hears(AskQuestion::getCommandPattern(), '\App\Bot\Voteabroad\Observer\AskQuestion@handle');
 
         $bot->listen();
     }
