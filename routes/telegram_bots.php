@@ -48,7 +48,7 @@ Route::post(
 
         DriverManager::loadDriver(TelegramDriver::class);
 
-        $bot = BotManFactory::create($config);
+        $bot = BotManFactory::create($config, new \BotMan\BotMan\Cache\LaravelCache());
 
         $bot->setContainer(app());
 

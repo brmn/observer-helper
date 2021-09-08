@@ -50,6 +50,8 @@ final class QuestionConversation extends Conversation
         $this->ask('Назовите номер УИКа', function (Answer $answer) {
             $this->uik = $answer->getText();
 
+            //@todo validate
+
             $this->askStatus();
         });
     }
@@ -59,6 +61,8 @@ final class QuestionConversation extends Conversation
         $this->ask('Укажите ваш статус(псг, наблюдатель, другое)', function (Answer $answer) {
             $this->status = $answer->getText();
 
+            //@todo validate
+
             $this->askQuestion();
         });
     }
@@ -67,6 +71,8 @@ final class QuestionConversation extends Conversation
     {
         $this->ask('Опишите проблему', function (Answer $answer) {
             $this->status = $answer->getText();
+
+            //@todo validate
 
             $this->observerAsksQuestion->process(
                 new ObserverAskQuestionDTO(
