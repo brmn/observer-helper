@@ -34,8 +34,9 @@ final class QuestionsDb implements Questions
     {
         return Question::make(
             Observer::make(
-                $question->observer['username'],
+                TelegramUsername::make($question->observer['username']),
                 $question->observer['fullname'],
+                (int)$question->observer['id'],
                 ObserverStatus::from(array_flip(ObserverStatus::toArray())[$question->observer['status']])
             ),
             UIK::make($question->uik),

@@ -104,6 +104,7 @@ final class QuestionConversation extends Conversation
                         'observer' => Observer::make(
                             TelegramUsername::make($this->getBot()->getUser()->getUsername()),
                             "{$this->getBot()->getUser()->getFirstName()} {$this->getBot()->getUser()->getLastName()}",
+                            (int)$this->getBot()->getUser()->getId(),
                             ObserverStatus::from(array_flip(ObserverStatus::toArray())[$this->status])
                         ),
                         'uik' => UIK::make((int)$this->uik),

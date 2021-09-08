@@ -12,17 +12,19 @@ final class Observer
     private TelegramUsername $username;
     private ObserverStatus $status;
     private string $fullName;
+    private int $id;
 
-    private function __construct(TelegramUsername $username, string $fullName, ObserverStatus $status)
+    private function __construct(TelegramUsername $username, string $fullName, int $id, ObserverStatus $status)
     {
         $this->username = $username;
         $this->status = $status;
-        $this->fullName = $fullName;
+        $this->fullName = trim($fullName);
+        $this->id = $id;
     }
 
-    public static function make(TelegramUsername $username, string $fullName, ObserverStatus $status): self
+    public static function make(TelegramUsername $username, string $fullName, int $id, ObserverStatus $status): self
     {
-        return new self($username, $fullName, $status);
+        return new self($username, $fullName, $id, $status);
     }
 
     public function asString(): string

@@ -86,6 +86,7 @@ TAG;
                         'observer' => Observer::make(
                             TelegramUsername::make($bot->getUser()->getUsername()),
                             "{$bot->getUser()->getFirstName()} {$bot->getUser()->getLastName()}",
+                            (int)$bot->getUser()->getId(),
                             ObserverStatus::from(array_flip(ObserverStatus::toArray())[$parsedQuery['observer_status']])
                         ),
                         'uik' => UIK::make((int)$parsedQuery['uik']),
