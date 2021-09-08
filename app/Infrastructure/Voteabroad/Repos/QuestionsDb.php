@@ -10,6 +10,7 @@ use App\Voteabroad\Entities\Observer;
 use App\Voteabroad\Entities\Question;
 use App\Voteabroad\Entities\Supporter;
 use App\Voteabroad\Services\Repos\Questions;
+use App\Voteabroad\ValueObjects\ObserverStatus;
 use App\Voteabroad\ValueObjects\QuestionStatus;
 use App\Voteabroad\ValueObjects\UIK;
 
@@ -32,7 +33,11 @@ final class QuestionsDb implements Questions
     private function makeEntity(VoteabroadQuestion $question): Question
     {
         return Question::make(
-            Observer::make($question->observer['username']),
+            Observer::make(
+                $question->observer['username'],
+                $question->observer['fullname'],
+                ObserverStatus::from(array_flip(ObserverStatus::toArray())[$question->observer['status']])
+            ),
             UIK::make($question->uik),
             $question->text,
             QuestionStatus::from($question->status),

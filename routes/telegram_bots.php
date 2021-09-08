@@ -3,6 +3,7 @@
 use App\Bot\Help;
 use App\Bot\Purchases\PurchasesSearch;
 use App\Bot\Voteabroad\Observer\AskQuestion;
+use App\Bot\Voteabroad\Observer\QuestionConversation;
 use App\Bot\Watchlists\Inn\WatchlistAddInn;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Drivers\DriverManager;
@@ -60,6 +61,14 @@ Route::post(
         });
 
         $bot->hears(AskQuestion::getCommandPattern(), '\App\Bot\Voteabroad\Observer\AskQuestion@handle');
+
+        $bot->hears(QuestionConversation::getCommandPattern(), static function (\BotMan\BotMan\BotMan $bot) {
+            $bot->startConversation(app()->make(QuestionConversation::class));
+        });
+
+        $bot->hears('стоп', static function (\BotMan\BotMan\BotMan $bot) {
+            $bot->reply('Прервано. Начните заново');
+        })->stopsConversation();
 
         $bot->listen();
     }
