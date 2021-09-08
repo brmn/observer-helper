@@ -14,6 +14,7 @@ use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use Illuminate\Support\Str;
+use Validator;
 
 final class QuestionConversation extends Conversation
 {
@@ -23,21 +24,9 @@ final class QuestionConversation extends Conversation
     protected string $status;
     protected string $text;
 
-    private ObserverAsksQuestion $observerAsksQuestion;
-
-    public function __construct(ObserverAsksQuestion $observerAsksQuestion)
-    {
-        $this->observerAsksQuestion = $observerAsksQuestion;
-    }
-
     public static function getCommandPattern(): string
     {
         return "^" . self::COMMAND . '$';
-    }
-
-    public function run(): void
-    {
-        $this->askUik();
     }
 
     public function stopsConversation(IncomingMessage $message): bool
@@ -45,12 +34,25 @@ final class QuestionConversation extends Conversation
         return Str::lower($message->getText()) === 'стоп';
     }
 
+    public function run(): void
+    {
+        $this->askUik();
+    }
+
     public function askUik(): void
     {
         $this->ask('Назовите номер УИКа', function (Answer $answer) {
             $this->uik = $answer->getText();
 
-            //@todo validate
+            $validator = Validator::make(['uik' => $this->uik], ['uik' => ['required', 'int', 'min:1', 'max:99999']]);
+
+            if ($validator->fails()) {
+                $this->say('Ошибка ' . $validator->errors()->toJson());
+
+                $this->askUik();
+
+                return;
+            }
 
             $this->askStatus();
         });
@@ -61,7 +63,18 @@ final class QuestionConversation extends Conversation
         $this->ask('Укажите ваш статус(псг, наблюдатель, другое)', function (Answer $answer) {
             $this->status = $answer->getText();
 
-            //@todo validate
+            $validator = Validator::make(
+                ['status' => $this->status],
+                ['status' => ['required', 'in:' . implode(',', ObserverStatus::toLabels())]]
+            );
+
+            if ($validator->fails()) {
+                $this->say('Ошибка ' . $validator->errors()->toJson());
+
+                $this->askStatus();
+
+                return;
+            }
 
             $this->askQuestion();
         });
@@ -70,11 +83,22 @@ final class QuestionConversation extends Conversation
     public function askQuestion(): void
     {
         $this->ask('Опишите проблему', function (Answer $answer) {
-            $this->status = $answer->getText();
+            $this->text = $answer->getText();
 
-            //@todo validate
+            $validator = Validator::make(
+                ['text' => $this->text],
+                ['text' => ['required', 'string', 'min:1', 'max:1000']]
+            );
 
-            $this->observerAsksQuestion->process(
+            if ($validator->fails()) {
+                $this->say('Ошибка ' . $validator->errors()->toJson());
+
+                $this->askQuestion();
+
+                return;
+            }
+
+            app()->make(ObserverAsksQuestion::class)->process(
                 new ObserverAskQuestionDTO(
                     [
                         'observer' => Observer::make(

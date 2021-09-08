@@ -48,7 +48,7 @@ TAG;
         $this->validationRules = [
             'uik' => ['required', 'int', 'min:1', 'max:99999'],
             'observer_status' => ['required', 'in:' . implode(',', ObserverStatus::toLabels())],
-            'text' => ['string', 'max:1000'],
+            'text' => ['required', 'string', 'min:1', 'max:1000'],
         ];
     }
 
