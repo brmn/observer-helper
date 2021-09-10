@@ -19,6 +19,12 @@ use Validator;
 final class QuestionConversation extends Conversation
 {
     private const COMMAND = 'вызов';
+    private const DESC = <<<'TAG'
+Привет! Это бот для связи с операторами Горячей линии по наблюдению.
+Для связи с Горячей линией наберите слово "вызов" (без кавычек).
+
+Если что-то пошло не так, наберите "стоп".
+TAG;
 
     protected string $uik;
     protected string $status;
@@ -27,6 +33,11 @@ final class QuestionConversation extends Conversation
     public static function getCommandPattern(): string
     {
         return "^" . self::COMMAND . '$';
+    }
+
+    public static function getDesc(): string
+    {
+        return self::DESC;
     }
 
     public function stopsConversation(IncomingMessage $message): bool

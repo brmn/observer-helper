@@ -2,7 +2,6 @@
 
 use App\Bot\Help;
 use App\Bot\Purchases\PurchasesSearch;
-use App\Bot\Voteabroad\Observer\AskQuestion;
 use App\Bot\Voteabroad\Observer\QuestionConversation;
 use App\Bot\Watchlists\Inn\WatchlistAddInn;
 use BotMan\BotMan\BotManFactory;
@@ -57,7 +56,7 @@ Route::post(
         });
 
         $bot->hears('/start', static function (\BotMan\BotMan\BotMan $bot) {
-            $bot->reply(AskQuestion::getDesc());
+            $bot->reply(QuestionConversation::getDesc());
         });
 
         $bot->hears(QuestionConversation::getCommandPattern(), static function (\BotMan\BotMan\BotMan $bot) {

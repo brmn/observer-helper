@@ -23,6 +23,8 @@ final class AskQuestion
     private const DESC = <<<'TAG'
 Привет! Это бот для связи с операторами Горячей линии по наблюдению.
 Для связи с Горячей линией наберите слово "вызов" (без кавычек).
+
+Если что-то пошло не так, наберите "стоп".
 TAG;
 
     private ObserverAsksQuestion $observerAsksQuestion;
