@@ -41,7 +41,7 @@ final class QuestionConversation extends Conversation
 
     public function askUik(): void
     {
-        $this->ask('Назовите номер УИКа', function (Answer $answer) {
+        $this->ask('Укажите номер УИК', function (Answer $answer) {
             $this->uik = $answer->getText();
 
             $validator = Validator::make(
@@ -63,12 +63,12 @@ final class QuestionConversation extends Conversation
 
     public function askStatus(): void
     {
-        $this->ask('Укажите ваш статус(псг, наблюдатель, другое)', function (Answer $answer) {
+        $this->ask('Укажите ваш статус(' . implode('|', ObserverStatus::toLabels()) . ')', function (Answer $answer) {
             $this->status = $answer->getText();
 
             $validator = Validator::make(
                 ['status' => $this->status],
-                ['status' => ['required', 'in:' . implode(',', ObserverStatus::toLabels())]]
+                ['status' => ['required', 'in:' . implode(', ', ObserverStatus::toLabels())]]
             );
 
             if ($validator->fails()) {
@@ -85,7 +85,7 @@ final class QuestionConversation extends Conversation
 
     public function askQuestion(): void
     {
-        $this->ask('Опишите проблему', function (Answer $answer) {
+        $this->ask('Коротко опишите проблему', function (Answer $answer) {
             $this->text = $answer->getText();
 
             $validator = Validator::make(
@@ -115,6 +115,8 @@ final class QuestionConversation extends Conversation
                     ]
                 )
             );
+
+            $this->say('Спасибо. Свяжемся с вами в ближайшее время.');
         });
     }
 }

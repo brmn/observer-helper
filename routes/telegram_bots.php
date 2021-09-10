@@ -65,7 +65,7 @@ Route::post(
         });
 
         $bot->hears('стоп', static function (\BotMan\BotMan\BotMan $bot) {
-            $bot->reply('Прервано. Начните заново');
+            $bot->reply('Прервано. Начните заново. Наберите "вызов"');
         })->stopsConversation();
 
         $bot->listen();
