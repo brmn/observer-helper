@@ -65,21 +65,19 @@ final class ObserverAsksQuestion
     private function getChatIds(): array
     {
         return array_unique(
-            [
-                $this->config['supporters_chat_id'],
-                $this->config['backup_chat_id'],
-                $this->config['test_chat_id']
-            ]
+            array_filter(
+                [
+                    $this->config['supporters_chat_id'],
+                    $this->config['backup_chat_id'],
+                    $this->config['test_chat_id']
+                ]
+            )
         );
     }
 
-    /**
-     * @param Question $question
-     * @return string
-     */
     private function makeMessage(Question $question): string
     {
-        return "УИК {$question->getUik()->getNumber()} {$question->getObserver()->asString()}: "
-            . "{$question->getText()}";
+        return "УИК {$question->getUik()->getNumber()}({$question->getUik()->getCountry()})"
+            . " {$question->getObserver()->asString()}: {$question->getText()}";
     }
 }

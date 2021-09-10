@@ -18,7 +18,7 @@ use Validator;
 
 final class QuestionConversation extends Conversation
 {
-    private const COMMAND = 'есть проблема';
+    private const COMMAND = 'вызов';
 
     protected string $uik;
     protected string $status;
@@ -44,7 +44,10 @@ final class QuestionConversation extends Conversation
         $this->ask('Назовите номер УИКа', function (Answer $answer) {
             $this->uik = $answer->getText();
 
-            $validator = Validator::make(['uik' => $this->uik], ['uik' => ['required', 'int', 'min:1', 'max:99999']]);
+            $validator = Validator::make(
+                ['uik' => $this->uik],
+                ['uik' => ['required', 'int', 'min:1', 'max:99999', 'in:' . implode(',', UIK::allNumbers())]]
+            );
 
             if ($validator->fails()) {
                 $this->say('Ошибка ' . $validator->errors()->toJson());

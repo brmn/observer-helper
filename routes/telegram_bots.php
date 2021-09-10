@@ -60,8 +60,6 @@ Route::post(
             $bot->reply(AskQuestion::getDesc());
         });
 
-        $bot->hears(AskQuestion::getCommandPattern(), '\App\Bot\Voteabroad\Observer\AskQuestion@handle');
-
         $bot->hears(QuestionConversation::getCommandPattern(), static function (\BotMan\BotMan\BotMan $bot) {
             $bot->startConversation(app()->make(QuestionConversation::class));
         });
