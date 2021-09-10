@@ -9,7 +9,6 @@ use Spatie\Enum\Enum;
 /**
  * @method static self observer()
  * @method static self psg()
- * @method static self other()
  */
 class ObserverStatus extends Enum
 {
@@ -18,7 +17,6 @@ class ObserverStatus extends Enum
         return [
             'observer' => 1,
             'psg' => 2,
-            'other' => 3,
         ];
     }
 
@@ -27,7 +25,6 @@ class ObserverStatus extends Enum
         return [
             'observer' => 'наблюдатель',
             'psg' => 'псг',
-            'other' => 'другое',
         ];
     }
 }
