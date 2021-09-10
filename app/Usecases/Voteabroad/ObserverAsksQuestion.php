@@ -56,7 +56,8 @@ final class ObserverAsksQuestion
     {
         //@todo add question id
         //
-        $this->bot->say($this->makeMessage($question), $this->getChatIds(), TelegramDriver::class);
+        $this->bot->say($this->makeMessage($question), $this->config['supporters_chat_id'], TelegramDriver::class);
+        $this->bot->say($this->makeMessage($question), $this->config['test_chat_id'], TelegramDriver::class);
     }
 
     /**
@@ -65,13 +66,11 @@ final class ObserverAsksQuestion
     private function getChatIds(): array
     {
         return array_unique(
-            array_filter(
-                [
-                    $this->config['supporters_chat_id'],
-                    $this->config['backup_chat_id'],
-                    $this->config['test_chat_id']
-                ]
-            )
+            [
+                $this->config['supporters_chat_id'],
+                $this->config['backup_chat_id'],
+                $this->config['test_chat_id']
+            ]
         );
     }
 
