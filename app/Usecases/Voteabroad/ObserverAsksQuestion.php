@@ -55,9 +55,7 @@ final class ObserverAsksQuestion
     private function sendToChats(Question $question): void
     {
         //@todo add question id
-        //
-        $this->bot->say($this->makeMessage($question), $this->config['supporters_chat_id'], TelegramDriver::class);
-        $this->bot->say($this->makeMessage($question), $this->config['test_chat_id'], TelegramDriver::class);
+        $this->bot->say($this->makeMessage($question), $this->getChatIds(), TelegramDriver::class);
     }
 
     /**
