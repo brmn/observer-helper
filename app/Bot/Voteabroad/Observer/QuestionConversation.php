@@ -68,7 +68,7 @@ final class QuestionConversation extends Conversation
 
             $validator = Validator::make(
                 ['status' => $this->status],
-                ['status' => ['required', 'in:' . implode(', ', ObserverStatus::toLabels())]]
+                ['status' => ['required', 'in:' . implode(',', ObserverStatus::toLabels())]]
             );
 
             if ($validator->fails()) {
