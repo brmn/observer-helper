@@ -74,24 +74,27 @@ TAG;
 
     public function askStatus(): void
     {
-        $this->ask('Укажите ваш статус(' . implode('|', ObserverStatus::toLabels()) . ')', function (Answer $answer) {
-            $this->status = $answer->getText();
+        $this->ask(
+            'Укажите ваш статус(' . Str::lower(implode('|', ObserverStatus::toLabels())) . ')',
+            function (Answer $answer) {
+                $this->status = Str::lower($answer->getText());
 
-            $validator = Validator::make(
-                ['status' => $this->status],
-                ['status' => ['required', 'in:' . implode(',', ObserverStatus::toLabels())]]
-            );
+                $validator = Validator::make(
+                    ['status' => $this->status],
+                    ['status' => ['required', 'in:' . Str::lower(implode(',', ObserverStatus::toLabels()))]]
+                );
 
-            if ($validator->fails()) {
-                $this->say('Ошибка ' . $validator->errors()->toJson());
+                if ($validator->fails()) {
+                    $this->say('Ошибка ' . $validator->errors()->toJson());
 
-                $this->askStatus();
+                    $this->askStatus();
 
-                return;
+                    return;
+                }
+
+                $this->askQuestion();
             }
-
-            $this->askQuestion();
-        });
+        );
     }
 
     public function askQuestion(): void
@@ -101,7 +104,7 @@ TAG;
 
             $validator = Validator::make(
                 ['text' => $this->text],
-                ['text' => ['required', 'string', 'min:1', 'max:1000']]
+                ['text' => ['required', 'string', 'min:1', 'max:3000']]
             );
 
             if ($validator->fails()) {
