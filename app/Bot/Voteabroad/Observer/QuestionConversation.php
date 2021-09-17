@@ -29,6 +29,7 @@ TAG;
     protected string $uik;
     protected string $status;
     protected string $text;
+    private string $needHelp;
 
     public static function getCommandPattern(): string
     {
@@ -115,22 +116,50 @@ TAG;
                 return;
             }
 
-            app()->make(ObserverAsksQuestion::class)->process(
-                new ObserverAskQuestionDTO(
-                    [
-                        'observer' => Observer::make(
-                            TelegramUsername::make($this->getBot()->getUser()->getUsername()),
-                            "{$this->getBot()->getUser()->getFirstName()} {$this->getBot()->getUser()->getLastName()}",
-                            (int)$this->getBot()->getUser()->getId(),
-                            ObserverStatus::from(array_flip(ObserverStatus::toArray())[$this->status])
-                        ),
-                        'uik' => UIK::make((int)$this->uik),
-                        'text' => $this->text,
-                    ]
-                )
+            $this->askNeedHelp();
+        });
+    }
+
+    public function askNeedHelp(): void
+    {
+        $this->ask('Нужна консультация оператора? да/нет', function (Answer $answer) {
+            $this->needHelp = Str::lower($answer->getText());
+
+            $validator = Validator::make(
+                ['need_help' => $this->needHelp],
+                ['text' => ['required', 'string', 'in:да,нет']]
             );
 
-            $this->say('Спасибо. Свяжемся с вами в ближайшее время.');
+            if ($validator->fails()) {
+                $this->say('Ошибка ' . $validator->errors()->toJson());
+
+                $this->askNeedHelp();
+
+                return;
+            }
+
+            $this->finish();
         });
+    }
+
+    private function finish(): void
+    {
+        app()->make(ObserverAsksQuestion::class)->process(
+            new ObserverAskQuestionDTO(
+                [
+                    'observer' => Observer::make(
+                        TelegramUsername::make($this->getBot()->getUser()->getUsername()),
+                        "{$this->getBot()->getUser()->getFirstName()} {$this->getBot()->getUser()->getLastName()}",
+                        (int)$this->getBot()->getUser()->getId(),
+                        ObserverStatus::from(array_flip(ObserverStatus::toArray())[$this->status])
+                    ),
+                    'uik' => UIK::make((int)$this->uik),
+                    'text' => $this->text,
+                    'needHelp' => $this->needHelp === 'да'
+                ]
+            )
+        );
+
+        $this->say('Спасибо. Свяжемся с вами в ближайшее время.');
     }
 }

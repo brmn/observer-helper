@@ -6,7 +6,6 @@ namespace App\Voteabroad\Entities;
 
 use App\Voteabroad\ValueObjects\QuestionStatus;
 use App\Voteabroad\ValueObjects\UIK;
-use JetBrains\PhpStorm\Pure;
 
 final class Question
 {
@@ -16,11 +15,13 @@ final class Question
     private string $text;
     private ?Supporter $supporter;
     private QuestionStatus $status;
+    private bool $needHelp;
 
     private function __construct(
         Observer $observer,
         UIK $uik,
         string $text,
+        bool $needHelp,
         QuestionStatus $status,
         Supporter $supporter = null,
         int $id = null
@@ -31,17 +32,19 @@ final class Question
         $this->status = $status;
         $this->supporter = $supporter;
         $this->id = $id;
+        $this->needHelp = $needHelp;
     }
 
     public static function make(
         Observer $observer,
         UIK $uik,
         string $text,
+        bool $needHelp,
         QuestionStatus $status,
         ?Supporter $supporter = null,
         int $id = null,
     ): self {
-        return new self($observer, $uik, $text, $status, $supporter, $id);
+        return new self($observer, $uik, $text, $needHelp, $status, $supporter, $id);
     }
 
     public function getObserver(): Observer
@@ -91,5 +94,10 @@ final class Question
     public function setId(int $id): void
     {
         $this->id = $id;
+    }
+
+    public function isNeedHelp(): bool
+    {
+        return $this->needHelp;
     }
 }

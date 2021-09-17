@@ -11,4 +11,5 @@ final class ObserverAskQuestionDTO extends DataTransferObject
     public Observer $observer;
     public UIK $uik;
     public string $text;
+    public bool $needHelp;
 }

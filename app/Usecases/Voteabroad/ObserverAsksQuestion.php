@@ -46,12 +46,9 @@ final class ObserverAsksQuestion
     private function saveQuestion(ObserverAskQuestionDTO $dto): Question
     {
         //@todo save
-        return Question::make($dto->observer, $dto->uik, $dto->text, QuestionStatus::open());
+        return Question::make($dto->observer, $dto->uik, $dto->text, $dto->needHelp, QuestionStatus::open());
     }
 
-    /**
-     * @param Question $question
-     */
     private function sendToChats(Question $question): void
     {
         //@todo add question id
@@ -75,6 +72,7 @@ final class ObserverAsksQuestion
     private function makeMessage(Question $question): string
     {
         return "УИК {$question->getUik()->getNumber()}({$question->getUik()->getCountry()})"
+            . " Нужна консультация оператора: " . $question->isNeedHelp() ? 'да' : 'нет'
             . " {$question->getObserver()->asString()}: {$question->getText()}";
     }
 }
