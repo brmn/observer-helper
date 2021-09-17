@@ -127,7 +127,7 @@ TAG;
 
             $validator = Validator::make(
                 ['need_help' => $this->needHelp],
-                ['text' => ['required', 'string', 'in:да,нет']]
+                ['need_help' => ['required', 'string', 'in:да,нет']]
             );
 
             if ($validator->fails()) {
