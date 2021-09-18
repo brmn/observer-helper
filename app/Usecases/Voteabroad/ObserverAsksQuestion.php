@@ -72,7 +72,8 @@ final class ObserverAsksQuestion
     private function makeMessage(Question $question): string
     {
         return "#УИК{$question->getUik()->getNumber()}(#{$question->getUik()->getCountry()})"
-            . " Нужна консультация оператора: " . ($question->isNeedHelp() ? 'да' : 'нет')
-            . " {$question->getObserver()->asString()}: {$question->getText()}";
+            . "\nНужна консультация оператора: " . ($question->isNeedHelp() ? 'да' : 'нет')
+            . " {$question->getObserver()->asString()}:"
+            . "\n{$question->getText()}";
     }
 }
